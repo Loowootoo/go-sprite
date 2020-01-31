@@ -10,17 +10,18 @@ mySprite.Position(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
 mySprite.CurrentAnimation = "walk-right"
 mySprite.Speed = 2
 mySprite.Start()
-*/package sprite
+*/
+package sprite
 
 import (
-	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"image"
 	"image/color"
 	"log"
 	"math"
 	"time"
-	//"fmt"
+
+	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/ebitenutil"
 )
 
 // Constant effects
@@ -614,14 +615,12 @@ func (sprite *Sprite) Draw(surface *ebiten.Image) {
 		x0 := currentAnimation.CurrentStep * currentAnimation.StepWidth
 		x1 := x0 + currentAnimation.StepWidth
 		r := image.Rect(x0, 0, x1, currentAnimation.StepHeight)
-		options.SourceRect = &r
-
+		// modify for use SubImage to correct draw
+		img := currentAnimation.Image.SubImage(r).(*ebiten.Image)
 		if sprite.Borders {
 			sprite.DrawBorders(surface, violet)
 		}
-
-		surface.DrawImage(currentAnimation.Image, options)
-
+		surface.DrawImage(img, options)
 		sprite.NextStep()
 	}
 }
